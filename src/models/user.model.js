@@ -20,8 +20,7 @@ const userSchema = new mongoose.Schema({
   bio: String,
   profileImage: {
     type: String,
-    default:
-      "User-Profile-PNG-File.png",
+    default: "User-Profile-PNG-File.png",
   },
 });
 

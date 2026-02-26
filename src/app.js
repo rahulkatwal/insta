@@ -2,6 +2,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const router = require("./routes/auth.routes");
+const postRouter = require("./routes/post.routes");
 const app = express();
 
 // use middleware
@@ -10,6 +11,7 @@ app.use(cookieParser());
 
 // user authRoutes
 app.use("/api/auth", router);
+app.use("/api/post", postRouter);
 
 // exprot app the help of module
 module.exports = app;
