@@ -22,6 +22,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "User-Profile-PNG-File.png",
   },
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
+  ],
 });
 
 // create user model

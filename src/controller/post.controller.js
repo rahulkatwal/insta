@@ -11,24 +11,7 @@ const imagekit = new Imagekit({
 
 // create post api here
 async function createPostController(req, res) {
-  console.log(req.body, req.file);
-
-  // check token in req.body
   const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({
-      message: "Token not provides, Unauthorized access",
-    });
-  }
-  let decoded = null;
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (err) {
-    return res.status(401).json({
-      message: "User not authorized",
-    });
-  }
-
   // upload file using imagekit
   const file = await imagekit.files.upload({
     file: req.file.buffer.toString("base64"),
@@ -39,7 +22,7 @@ async function createPostController(req, res) {
   const post = await postModel.create({
     caption: req.body.caption,
     imgUrl: file.url,
-    user: decoded.id,
+    user: req.user.id,
   });
   res.status(201).json({
     message: "Post created successfuly.",
@@ -49,22 +32,9 @@ async function createPostController(req, res) {
 
 // create get post api here
 async function getPostController(req, res) {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({
-      message: "Token not provided, Unauthorized User",
-    });
-  }
-  let decoded;
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (err) {
-    return res.status(401).json({
-      message: "Token Invalid",
-    });
-  }
+  // user middlerware here
 
-  const userId = decoded.id;
+  const userId = req.user.id;
   // create a post var and find post using postmodel find method
   const post = await postModel.find({ user: userId });
   res.status(200).json({
@@ -73,23 +43,10 @@ async function getPostController(req, res) {
   });
 }
 
-// create new get post detials API her
+// create new get post detials API here
 async function getPostDetailsController(req, res) {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({
-      message: "Unauthorized Access",
-    });
-  }
-  // verfy token here
-
-  let decoded;
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (err) {
-    return res.status(401).json({ message: "Token Invailid" });
-  }
-  const userId = decoded.id;
+  // user middlerware here
+  const userId = req.user.id;
   const postId = req.params.postId;
   // find post with help of postmodel with find method
   const post = await postModel.findById(postId);
