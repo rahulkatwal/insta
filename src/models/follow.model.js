@@ -2,19 +2,17 @@
 const mongoose = require("mongoose");
 
 // ceate schema here
-const followSchema = new mongoose.Schema({
-  follower: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: [true, "Follower is Required"],
+const followSchema = new mongoose.Schema(
+  {
+    follower: {
+      type: String,
+    },
+    followee: {
+      type: String,
+    },
   },
-  followee: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: [true, "Followee is Required"],
-  },
-  timestamps: true,
-});
+  { timestamps: true },
+);
 
 // create model here
 const followerModel = mongoose.model("Follows", followSchema);
